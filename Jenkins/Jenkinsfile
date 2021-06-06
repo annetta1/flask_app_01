@@ -9,7 +9,7 @@ dockerRemove="docker container rm -f my-site"
 
 }
 
-    agent any
+    agent { node { label 'ubuntu_1_node' } }
 
     stages {
         stage('Cloning Git') {
