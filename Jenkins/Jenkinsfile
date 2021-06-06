@@ -20,7 +20,8 @@ dockerRemove="docker container rm -f my-site"
         
         stage("Build and start test image") {
 	    steps {
-	     step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartAllServices'], useCustomDockerComposeFile: true])
+	      sh "docker-composer build"
+              sh "docker-compose up -d"
 	     }
 	}
 
