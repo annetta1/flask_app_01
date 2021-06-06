@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+
+  db:
+    image: mysql:5.7.22
+    restart: always
+    container_name: mysql_container
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: roott
+      MYSQL_DATABASE: db_posts
+    volumes:
+      - mysql_db:/var/lib/mysql
+
+
+  flask:
+    depends_on:
+      - nginx
+      - db
+    links:
+      - db
+    build: ./flask
+    container_name: flask
+    restart: always
+    environment:
+      - APP_NAME=MyFlaskApp
+    expose:
+      - 8080
+
+volumes:
+  mysql_db:
+
+
