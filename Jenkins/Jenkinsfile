@@ -1,0 +1,30 @@
+pipeline {
+
+environment {
+    imagename = "annetta/site_test"
+    registryCredential = 'docker_annetta'
+    dockerImage = ''
+    dockerRun = "docker run -p 8080:80 -d --name my-site annetta/site_test:latest"
+dockerRemove="docker container rm -f my-site"
+
+}
+
+    agent any
+
+    stages {
+        stage('Cloning Git') {
+            steps {
+                git branch: 'main', credentialsId: 'id_rsa_git', url: 'git@github.com:annetta1/flask_app_01.git'
+            }
+        }
+        
+        stage("Build and start test image") {
+
+	     step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartAllServices'], useCustomDockerComposeFile: true])
+	}
+
+
+
+
+    }
+}
