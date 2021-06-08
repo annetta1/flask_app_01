@@ -3,13 +3,11 @@ pipeline {
 environment {
     imagename = "annetta/site_test"
     registryCredential = 'docker_annetta'
-    dockerImage = ''
-    dockerRun = "docker run -p 8080:80 -d --name my-site annetta/site_test:latest"
-dockerRemove="docker container rm -f my-site"
+    dockerRemove="docker container rm -f my-site"
 
 }
 
-    agent { node { label 'ubuntu_1_node' } }
+    agent { node { label 'agent1' } }
 
     stages {
         stage('Cloning Git') {
@@ -18,10 +16,9 @@ dockerRemove="docker container rm -f my-site"
             }
         }
         
-        stage("Build and start test image") {
+        stage("Build images") {
 	    steps {
 	      sh "docker-compose build"
-              sh "docker-compose up -d"
 	     }
 	}
 
